@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Is Pericos Crowded?</title>
+        <meta name="description" content="Never show up to a line. Use this app to get a real-time look at how busy Taqueria Los Pericos is.">
+        <meta name="author" content="Ryan Abraham">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://o8ulxwqrt9.execute-api.us-west-1.amazonaws.com/dev/pericos" rel="preconnect" crossorigin>
+        <link rel="manifest" href="./js/manifest.json">
+        <link rel="apple-touch-icon" href="./img/apple_touch_icon.png">
+        <link rel="shortcut icon" href="./img/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="./css/style.min.css">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#91BF26">
+    </head>
+    <body>
+        <main id="main">
+            <!-- main content -->
+            <section id="crowd-content-wrapper">
+                <h1 id="crowd-status">
+                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                </h1>
+                <p id="crowd-summary"></p>
+            </section>
+            <!-- toolbar -->
+            <div id="download-icon" class="hidden"></div>
+            <div id="about-icon"></div>
+            <!-- modal overlay -->
+            <section id="overlay" class="hidden"></section>
+            <!-- modal -->
+            <section id="modal" class="hidden">
+                <div id="modal-close-icon"></div>
+                <img id="modal-app-icon" src="./img/apple_touch_icon.png" alt="Is Pericos Crowded Icon"/>
+                <h3>Install Is Pericos Crowded 0.1.1</h3>
+                <p>Install this app on your home screen for quick and easy&nbsp;access.</p>
+                <span>
+                    Just tap
+                    <img id="modal-share-icon" src="./img/share_icon.png" alt="Share Icon"/>
+                    then <nobr>'Add to Home Screen'</nobr>
+                </span>
+            </section>
+        </main>
+
+        <div id="about">
+            <h2>Is Pericos Crowded?</h2>
+            <p>
+                This site determines how crowded Taqueria Los Pericos is, so you're never surprised by a line.
+                <br><br>
+                <b>How It Works</b>
+                <br>
+                This site, using anonymous GPS data from smartphones, estimates the number
+                of people that are currently inside of Pericos and weighs this
+                against historical averages. It then boils this information down into a simple
+                message about the crowd situation at Santa Cruz's favorite taqueria.
+            </p>
+            <div id="close-icon"></div>
+        </div>
+
+        <script src="./js/main.js"></script>
+    </body>
+</html>
