@@ -55,6 +55,9 @@ p nobr {
 p.tooltip {
     color: #F1D0B6;
 }
+a, a:visited {
+    color: #315294;
+}
 #about-icon, #download-icon, #modal-close-icon, #close-icon {
     position: absolute;
     top: 20px;
@@ -153,6 +156,9 @@ p.tooltip {
     text-align: left;
     font-size: 1.35rem;
     line-height: 1.4;
+}
+#about small {
+    font-size: 1rem;
 }
 .hidden {
     display: none;
