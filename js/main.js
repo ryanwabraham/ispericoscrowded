@@ -82,6 +82,8 @@ function getCrowdData() {
         return response.json();
     }).then((crowdData) => {
         determineCrowdLevel(crowdData);
+    }).catch(() => {
+        //
     });
 }
 
@@ -103,9 +105,11 @@ function isInStandaloneMode() {
 }
 
 function pericosIsClosed(crowdData) {
-    // return true if popularity is 0
     const time = new Date();
-    return !crowdData.populartimes[time.getDay() - 1].data[time.getHours()];
+    // convert from Sunday as 0-index to Monday as 0-index
+    const day = time.getDay() > 0 ? time.getDay() - 1 : 6;
+    // return true if popularity is 0
+    return !crowdData.populartimes[day].data[time.getHours()];
 }
 
 function queueRefresh() {
