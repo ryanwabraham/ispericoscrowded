@@ -17,7 +17,7 @@ const emojiMap = {
     "Bummer.": ["🦗", "😢", "😭", "😞"],
     "Sick!": ["🙌", "🥳", "🎉", "💯"],
     "All good!": ["🙌", "👏", "👌", "🤙"],
-    "Nice.": ["😙", "💁", "👌", "🤙"],
+    "...": ["😬", "😕", "😶", "🙊"],
     "Yikes.": ["🙅", "🤢", "👎", "😬"],
     "Don't go.": ["⚰", "😵", "🤬", "🙅"]
 };
@@ -58,8 +58,8 @@ function determineCrowdLevel(crowdData) {
         status = "not crowded";
         reaction = "All good!";
     } else if (popularity >= 40 && popularity < 60) {
-        status = "not too crowded";
-        reaction = "Nice.";
+        status = "pretty crowded";
+        reaction = "...";
     } else if (popularity >= 60 && popularity < 80) {
         status = "crowded";
         reaction = "Yikes.";
