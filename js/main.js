@@ -45,9 +45,7 @@ function determineCrowdLevel(crowdData) {
             summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
             updateView(summary, reaction);
         } else {
-            reaction = "Oops.";
-            summary = `${reaction} An <b>error</b> occurred. Please try again later.`;
-            updateView(summary, reaction);
+            displayErrorMessage();
         }
         return;
     }
@@ -73,6 +71,12 @@ function determineCrowdLevel(crowdData) {
     updateView(summary, reaction);
 }
 
+function displayErrorMessage() {
+    const reaction = "Oops.";
+    const summary = `${reaction} An <b>error</b> occurred. Please try again later.`;
+    updateView(summary, reaction);
+}
+
 function getCrowdData() {
     fetch(endpoint, {
         method: "GET",
@@ -83,7 +87,7 @@ function getCrowdData() {
     }).then((crowdData) => {
         determineCrowdLevel(crowdData);
     }).catch(() => {
-        //
+        displayErrorMessage();
     });
 }
 
