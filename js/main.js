@@ -11,6 +11,7 @@ const modal = document.getElementById("modal");
 const modalCloseIcon = document.getElementById("modal-close-icon");
 const aboutTitle = document.querySelector("#about > h2");
 const aboutDescription = document.querySelector("#about > p");
+const crowdDebugger = document.getElementById('crowd-level-debugger');
 const endpoint = "https://o8ulxwqrt9.execute-api.us-west-1.amazonaws.com/dev/pericos";
 const emojiMap = {
     "Oops.": ["😳", "😅", "🤦", "🤯"],
@@ -72,6 +73,7 @@ function determineCrowdLevel(crowdData) {
         reaction = "Don't go.";
     }
     summary = `${reaction} Los Pericos is <nobr>${status}</nobr> right&nbsp;now.`;
+    crowdDebugger.innerHTML = popularity;
     updateView(summary, reaction);
 }
 
