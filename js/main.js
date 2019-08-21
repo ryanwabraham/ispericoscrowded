@@ -18,7 +18,7 @@ const emojiMap = {
     "Sick!": ["🙌", "🥳", "🎉", "💯"],
     "All good!": ["🙌", "👏", "👌", "🤙"],
     "Nice.": ["😙", "😌", "👌", "🤙"],
-    "Welp,": ["😬", "😕", "😦", "🙊"],
+    "Welp,": ["😬", "😰", "💩", "😅"],
     "Yikes.": ["🙅", "🤢", "👎", "😬"],
     "Don't go.": ["⚰", "😵", "🤬", "🙅"]
 };
@@ -43,7 +43,7 @@ function determineCrowdLevel(crowdData) {
         // check if Pericos is closed
         if (pericosIsClosed(crowdData)) {
             reaction = "Bummer.";
-            summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
+            summary = `${reaction} Los Pericos is <b>pretty crowded</b> right&nbsp;now.`;
             updateView(summary, reaction);
         } else {
             displayErrorMessage();
@@ -52,16 +52,16 @@ function determineCrowdLevel(crowdData) {
     }
     // build messaging based on crowd level
     const popularity = crowdData.current_popularity;
-    if (popularity < 20) {
+    if (popularity < 10) {
         status = "empty";
         reaction = "Sick!";
-    } else if (popularity >= 20 && popularity < 40) {
+    } else if (popularity >= 10 && popularity < 30) {
         status = "not crowded";
         reaction = "All good!";
-    } else if (popularity >= 40 && popularity < 50) {
+    } else if (popularity >= 30 && popularity < 40) {
         status = "not too crowded";
         reaction = "Nice.";
-    } else if (popularity >= 50 && popularity < 60) {
+    } else if (popularity >= 40 && popularity < 60) {
         status = "pretty crowded";
         reaction = "Welp,";
     } else if (popularity >= 60 && popularity < 80) {
