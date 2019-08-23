@@ -39,6 +39,7 @@ function determineCrowdLevel(crowdData) {
     let status = "";
     let reaction = "";
     let summary = "";
+    let score;
     // validate data, display error message
     if (typeof crowdData.current_popularity === "undefined") {
         // check if Pericos is closed
@@ -51,29 +52,38 @@ function determineCrowdLevel(crowdData) {
         }
         return;
     }
-    // build messaging based on crowd level
-    const popularity = crowdData.current_popularity;
-    if (popularity < 10) {
+    const currentPopularity = crowdData.current_popularity;
+    const historicalPopularity = getHistoricalData(crowdData);
+    // if current popularity is less than the
+    // historical average, split the difference
+    // for a more conservative score
+    if (historicalPopularity > currentPopularity) {
+        score = (historicalPopularity + currentPopularity) / 2;
+    } else {
+        score = currentPopularity;
+    }
+    // build a message based on score
+    if (score < 10) {
         status = "empty";
         reaction = "Sick!";
-    } else if (popularity >= 10 && popularity < 30) {
+    } else if (score >= 10 && score < 30) {
         status = "not crowded";
         reaction = "All good!";
-    } else if (popularity >= 30 && popularity < 40) {
+    } else if (score >= 30 && score < 40) {
         status = "not too crowded";
         reaction = "Nice.";
-    } else if (popularity >= 40 && popularity < 60) {
+    } else if (score >= 40 && score < 60) {
         status = "pretty crowded";
         reaction = "Welp,";
-    } else if (popularity >= 60 && popularity < 80) {
+    } else if (score >= 60 && score < 80) {
         status = "crowded";
         reaction = "Yikes.";
-    } else if (popularity >= 80 && popularity <= 100) {
+    } else if (score >= 80 && score <= 100) {
         status = "mobbed";
         reaction = "Don't go.";
     }
     summary = `${reaction} Los Pericos is <nobr>${status}</nobr> right&nbsp;now.`;
-    crowdDebugger.innerHTML = popularity;
+    crowdDebugger.innerHTML = score;
     updateView(summary, reaction);
 }
 
@@ -97,6 +107,14 @@ function getCrowdData() {
     });
 }
 
+function getHistoricalData(crowdData) {
+    const time = new Date();
+    // convert from Sunday as 0-index to Monday as 0-index
+    const day = time.getDay() > 0 ? time.getDay() - 1 : 6;
+    // return true if popularity is 0
+    return crowdData.populartimes[day].data[time.getHours()];
+}
+
 function hideElement(element) {
     element.classList.add("hidden");
     element.classList.remove("animated", "quick", "fadeInUp");
@@ -115,11 +133,8 @@ function isInStandaloneMode() {
 }
 
 function pericosIsClosed(crowdData) {
-    const time = new Date();
-    // convert from Sunday as 0-index to Monday as 0-index
-    const day = time.getDay() > 0 ? time.getDay() - 1 : 6;
-    // return true if popularity is 0
-    return !crowdData.populartimes[day].data[time.getHours()];
+    // return true if historical popularity is 0
+    return !getHistoricalData(crowdData);
 }
 
 function queueRefresh() {
