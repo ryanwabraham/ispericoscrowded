@@ -11,8 +11,9 @@ const modal = document.getElementById("modal");
 const modalCloseIcon = document.getElementById("modal-close-icon");
 const aboutTitle = document.querySelector("#about > h2");
 const aboutDescription = document.querySelector("#about > p");
-const crowdDebugger = document.getElementById('crowd-level-debugger');
+const fineprint = document.getElementById("fineprint");
 const endpoint = "https://o8ulxwqrt9.execute-api.us-west-1.amazonaws.com/dev/pericos";
+const debugMode = true;
 const emojiMap = {
     "Oops.": ["😳", "😅", "🤦", "🤯"],
     "Bummer.": ["🦗", "😢", "😭", "😞"],
@@ -90,6 +91,20 @@ function crowdDataIsValid(crowdData) {
     return true;
 }
 
+function displayDebugInfo(crowdData, score) {
+    const debugFigures = {
+        "current popularity": crowdData.current_popularity,
+        "historical popularity": getHistoricalData(crowdData),
+        "crowd score": score
+    };
+    for (figure in debugFigures) {
+        const element = document.createElement("span");
+        element.classList.add('debug-info');
+        element.innerHTML = `${figure}: ${debugFigures[figure]}`;
+        fineprint.appendChild(element);
+    }
+}
+
 function displayErrorMessage() {
     const reaction = "Oops.";
     const summary = `${reaction} An <b>error</b> occurred. Please try again later.`;
@@ -145,6 +160,7 @@ function processCrowdData(crowdData) {
     if (crowdDataIsValid(crowdData)) {
         const score = calculateScore(crowdData);
         const message = buildMessage(score);
+        if (debugMode) displayDebugInfo(crowdData, score);
         updateView(message.summary, message.reaction);
     }
 }
