@@ -29,62 +29,65 @@ let appNeedsRefresh = false;
 // initialize app
 //
 
-getCrowdData();
+initializeApp();
 
 //
 // functions
 //
 
-function determineCrowdLevel(crowdData) {
-    let status = "";
-    let reaction = "";
-    let summary = "";
-    let score;
-    // validate data, display error message
-    if (typeof crowdData.current_popularity === "undefined") {
-        // check if Pericos is closed
-        if (pericosIsClosed(crowdData)) {
-            reaction = "Bummer.";
-            summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
-            updateView(summary, reaction);
-        } else {
-            displayErrorMessage();
-        }
-        return;
+function buildMessage(score) {
+    let message = {};
+    // build a message based on score
+    if (score < 10) {
+        message['status'] = "empty";
+        message['reaction'] = "Sick!";
+    } else if (score >= 10 && score < 30) {
+        message['status'] = "not crowded";
+        message['reaction'] = "All good!";
+    } else if (score >= 30 && score < 40) {
+        message['status'] = "not too crowded";
+        message['reaction'] = "Nice.";
+    } else if (score >= 40 && score < 60) {
+        message['status'] = "pretty crowded";
+        message['reaction'] = "Welp,";
+    } else if (score >= 60 && score < 80) {
+        message['status'] = "crowded";
+        message['reaction'] = "Yikes.";
+    } else if (score >= 80 && score <= 100) {
+        message['status'] = "mobbed";
+        message['reaction'] = "Don't go.";
     }
+    message['summary'] = `${message['reaction']} Los Pericos is <nobr>${message['status']}</nobr> right&nbsp;now.`;
+    return message;
+}
+
+function calculateScore(crowdData) {
     const currentPopularity = crowdData.current_popularity;
     const historicalPopularity = getHistoricalData(crowdData);
+    let score = currentPopularity;
     // if current popularity is less than the
     // historical average, split the difference
     // for a more conservative score
     if (historicalPopularity > currentPopularity) {
         score = (historicalPopularity + currentPopularity) / 2;
-    } else {
-        score = currentPopularity;
     }
-    // build a message based on score
-    if (score < 10) {
-        status = "empty";
-        reaction = "Sick!";
-    } else if (score >= 10 && score < 30) {
-        status = "not crowded";
-        reaction = "All good!";
-    } else if (score >= 30 && score < 40) {
-        status = "not too crowded";
-        reaction = "Nice.";
-    } else if (score >= 40 && score < 60) {
-        status = "pretty crowded";
-        reaction = "Welp,";
-    } else if (score >= 60 && score < 80) {
-        status = "crowded";
-        reaction = "Yikes.";
-    } else if (score >= 80 && score <= 100) {
-        status = "mobbed";
-        reaction = "Don't go.";
+    return score;
+}
+
+function crowdDataIsValid(crowdData) {
+    // validate data, display error message
+    if (typeof crowdData.current_popularity === "undefined") {
+        // check if Pericos is closed
+        if (pericosIsClosed(crowdData)) {
+            const reaction = "Bummer.";
+            const summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
+            updateView(summary, reaction);
+        } else {
+            displayErrorMessage();
+        }
+        return false;
     }
-    summary = `${reaction} Los Pericos is <nobr>${status}</nobr> right&nbsp;now.`;
-    crowdDebugger.innerHTML = score;
-    updateView(summary, reaction);
+    return true;
 }
 
 function displayErrorMessage() {
@@ -93,7 +96,8 @@ function displayErrorMessage() {
     updateView(summary, reaction);
 }
 
-function getCrowdData() {
+function initializeApp() {
+    // get crowd data from API endpoint
     fetch(endpoint, {
         method: "GET",
         mode: "cors",
@@ -101,7 +105,7 @@ function getCrowdData() {
     }).then((response) => {
         return response.json();
     }).then((crowdData) => {
-        determineCrowdLevel(crowdData);
+        processCrowdData(crowdData);
     }).catch(() => {
         displayErrorMessage();
     });
@@ -135,6 +139,14 @@ function isInStandaloneMode() {
 function pericosIsClosed(crowdData) {
     // return true if historical popularity is 0
     return !getHistoricalData(crowdData);
+}
+
+function processCrowdData(crowdData) {
+    if (crowdDataIsValid(crowdData)) {
+        const score = calculateScore(crowdData);
+        const message = buildMessage(score);
+        updateView(message.summary, message.reaction);
+    }
 }
 
 function queueRefresh() {
