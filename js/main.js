@@ -20,7 +20,7 @@ const emojiMap = {
     "Sick!": ["🙌", "🥳", "🎉", "💯"],
     "All good!": ["🙌", "👏", "👌", "🤙"],
     "Nice.": ["😙", "😌", "👌", "🤙"],
-    "Welp,": ["😬", "😰", "💩", "😅"],
+    "Welp,": ["😬", "😰", "😑", "😅"],
     "Yikes.": ["🙅", "🤢", "👎", "😬"],
     "Don't go.": ["⚰", "😵", "🤬", "🙅"]
 };
@@ -49,7 +49,7 @@ function buildMessage(score) {
         message["status"] = "not too crowded";
         message["reaction"] = "Nice.";
     } else if (score >= 40 && score < 60) {
-        message["status"] = "pretty crowded";
+        message["status"] = "kinda crowded";
         message["reaction"] = "Welp,";
     } else if (score >= 60 && score < 80) {
         message["status"] = "crowded";
