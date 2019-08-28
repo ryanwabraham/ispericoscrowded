@@ -1,3 +1,7 @@
+//
+// variables
+//
+
 const body = document.body;
 const main = document.getElementById("main");
 const contentWrapper = document.getElementById("crowd-content-wrapper");
@@ -27,12 +31,6 @@ const emojiMap = {
 let appNeedsRefresh = false;
 
 //
-// initialize app
-//
-
-initializeApp();
-
-//
 // functions
 //
 
@@ -40,25 +38,25 @@ function buildMessage(score) {
     let message = {};
     // build a message based on score
     if (score < 10) {
-        message["status"] = "empty";
-        message["reaction"] = "Sick!";
+        message.status = "empty";
+        message.reaction = "Sick!";
     } else if (score >= 10 && score < 30) {
-        message["status"] = "not crowded";
-        message["reaction"] = "All good!";
+        message.status = "not crowded";
+        message.reaction = "All good!";
     } else if (score >= 30 && score < 40) {
-        message["status"] = "not too crowded";
-        message["reaction"] = "Nice.";
+        message.status = "not too crowded";
+        message.reaction = "Nice.";
     } else if (score >= 40 && score < 60) {
-        message["status"] = "kinda crowded";
-        message["reaction"] = "Welp,";
+        message.status = "kinda crowded";
+        message.reaction = "Welp,";
     } else if (score >= 60 && score < 80) {
-        message["status"] = "crowded";
-        message["reaction"] = "Yikes.";
+        message.status = "crowded";
+        message.reaction = "Yikes.";
     } else if (score >= 80 && score <= 100) {
-        message["status"] = "mobbed";
-        message["reaction"] = "Don't go.";
+        message.status = "mobbed";
+        message.reaction = "Don't go.";
     }
-    message["summary"] = `${message["reaction"]} Los Pericos is <nobr>${message["status"]}</nobr> right&nbsp;now.`;
+    message.summary = `${message.reaction} Los Pericos is <nobr>${message.status}</nobr> right&nbsp;now.`;
     return message;
 }
 
@@ -67,7 +65,7 @@ function calculateScore(crowdData) {
     const historicalPopularity = getHistoricalData(crowdData) / 100;
     // weight the currentPopularity more
     // than the historicalPopularity
-    return Math.round(((currentPopularity * .7) + (historicalPopularity * .3)) * 100);
+    return Math.round(((currentPopularity * 0.7) + (historicalPopularity * 0.3)) * 100);
 }
 
 function crowdDataIsValid(crowdData) {
@@ -92,7 +90,7 @@ function displayDebugInfo(crowdData, score) {
         "historical popularity": getHistoricalData(crowdData),
         "crowd score": score
     };
-    for (figure in debugFigures) {
+    for (let figure in debugFigures) {
         const element = document.createElement("span");
         element.classList.add("debug-info");
         element.innerHTML = `${figure}: ${debugFigures[figure]}`;
@@ -143,7 +141,7 @@ function isAppleDevice() {
 }
 
 function isInStandaloneMode() {
-    return (window.navigator.standalone == true || window.matchMedia("(display-mode: standalone)").matches);
+    return (window.navigator.standalone === true || window.matchMedia("(display-mode: standalone)").matches);
 }
 
 function pericosIsClosed(crowdData) {
@@ -198,7 +196,7 @@ function toggleMenu() {
         body.classList.add("menu-open");
         showElement(closeIcon);
         showElement(aboutTitle);
-        setTimeout(function() {
+        setTimeout(() => {
             showElement(aboutDescription);
         }, 100);
         main.addEventListener("click", toggleMenu);
@@ -219,7 +217,7 @@ function updateView(summary, reaction) {
     const emoji = emojiMap[reaction][Math.floor(Math.random() * 4)];
     statusHeader.innerHTML = emoji;
     showElement(statusHeader);
-    setTimeout(function() {
+    setTimeout(() => {
         summaryText.innerHTML = summary;
         showElement(summaryText);
     }, 100);
@@ -274,8 +272,14 @@ overlay.addEventListener("click", toggleModal);
 closeIcon.addEventListener("click", toggleMenu);
 
 // close menu when esc key is clicked
-window.addEventListener("keyup", function(e){
-    if (e.keyCode == 27) {
+window.addEventListener("keyup", (e) => {
+    if (e.keyCode === 27) {
         toggleMenu();
     }
 }, false);
+
+//
+// initialize app
+//
+
+initializeApp();
