@@ -40,25 +40,25 @@ function buildMessage(score) {
     let message = {};
     // build a message based on score
     if (score < 10) {
-        message['status'] = "empty";
-        message['reaction'] = "Sick!";
+        message["status"] = "empty";
+        message["reaction"] = "Sick!";
     } else if (score >= 10 && score < 30) {
-        message['status'] = "not crowded";
-        message['reaction'] = "All good!";
+        message["status"] = "not crowded";
+        message["reaction"] = "All good!";
     } else if (score >= 30 && score < 40) {
-        message['status'] = "not too crowded";
-        message['reaction'] = "Nice.";
+        message["status"] = "not too crowded";
+        message["reaction"] = "Nice.";
     } else if (score >= 40 && score < 60) {
-        message['status'] = "pretty crowded";
-        message['reaction'] = "Welp,";
+        message["status"] = "pretty crowded";
+        message["reaction"] = "Welp,";
     } else if (score >= 60 && score < 80) {
-        message['status'] = "crowded";
-        message['reaction'] = "Yikes.";
+        message["status"] = "crowded";
+        message["reaction"] = "Yikes.";
     } else if (score >= 80 && score <= 100) {
-        message['status'] = "mobbed";
-        message['reaction'] = "Don't go.";
+        message["status"] = "mobbed";
+        message["reaction"] = "Don't go.";
     }
-    message['summary'] = `${message['reaction']} Los Pericos is <nobr>${message['status']}</nobr> right&nbsp;now.`;
+    message["summary"] = `${message["reaction"]} Los Pericos is <nobr>${message["status"]}</nobr> right&nbsp;now.`;
     return message;
 }
 
@@ -94,7 +94,7 @@ function displayDebugInfo(crowdData, score) {
     };
     for (figure in debugFigures) {
         const element = document.createElement("span");
-        element.classList.add('debug-info');
+        element.classList.add("debug-info");
         element.innerHTML = `${figure}: ${debugFigures[figure]}`;
         fineprint.appendChild(element);
     }
@@ -139,7 +139,7 @@ function isAndroidDevice() {
 }
 
 function isAppleDevice() {
-    return ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
+    return ["iPhone", "iPad", "iPod"].includes(navigator.platform);
 }
 
 function isInStandaloneMode() {
@@ -240,7 +240,7 @@ if (shouldDisplayDownloadIcon()) {
 if (isInStandaloneMode()) {
     // queue an app refresh when the
     // app is closed or is in the background
-    document.addEventListener('visibilitychange', queueRefresh, false);
+    document.addEventListener("visibilitychange", queueRefresh, false);
 }
 
 //
