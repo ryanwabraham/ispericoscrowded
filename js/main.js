@@ -45,7 +45,7 @@ function determineCrowdLevel(crowdData) {
         // check if Pericos is closed
         if (pericosIsClosed(crowdData)) {
             reaction = "Bummer.";
-            summary = `${reaction} Los Pericos is <b>pretty crowded</b> right&nbsp;now.`;
+            summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
             updateView(summary, reaction);
         } else {
             displayErrorMessage();
