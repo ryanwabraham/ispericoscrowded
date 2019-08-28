@@ -63,16 +63,11 @@ function buildMessage(score) {
 }
 
 function calculateScore(crowdData) {
-    const currentPopularity = crowdData.current_popularity;
-    const historicalPopularity = getHistoricalData(crowdData);
-    let score = currentPopularity;
-    // if current popularity is less than the
-    // historical average, split the difference
-    // for a more conservative score
-    if (historicalPopularity > currentPopularity) {
-        score = (historicalPopularity + currentPopularity) / 2;
-    }
-    return score;
+    const currentPopularity = crowdData.current_popularity / 100;
+    const historicalPopularity = getHistoricalData(crowdData) / 100;
+    // weight the currentPopularity more
+    // than the historicalPopularity
+    return Math.round(((currentPopularity * .7) + (historicalPopularity * .3)) * 100);
 }
 
 function crowdDataIsValid(crowdData) {
