@@ -35,7 +35,7 @@ let appNeedsRefresh = false;
 //
 
 function buildMessage(score) {
-    let message = {};
+    const message = {};
     // build a message based on score
     if (score < 10) {
         message.status = "empty";
@@ -69,19 +69,24 @@ function calculateScore(crowdData) {
 }
 
 function crowdDataIsValid(crowdData) {
-    // validate data, display error message
+    // if there is no current_popularity
+    // either Pericos is closed or
+    // an API error occurred
     if (typeof crowdData.current_popularity === "undefined") {
-        // check if Pericos is closed
         if (pericosIsClosed(crowdData)) {
-            const reaction = "Bummer.";
-            const summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
-            updateView(summary, reaction);
+            displayClosedMessage()
         } else {
             displayErrorMessage();
         }
         return false;
     }
     return true;
+}
+
+function displayClosedMessage() {
+    const reaction = "Bummer.";
+    const summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
+    updateView(summary, reaction);
 }
 
 function displayDebugInfo(crowdData, score) {
@@ -123,7 +128,6 @@ function getHistoricalData(crowdData) {
     const time = new Date();
     // convert from Sunday as 0-index to Monday as 0-index
     const day = time.getDay() > 0 ? time.getDay() - 1 : 6;
-    // return true if popularity is 0
     return crowdData.populartimes[day].data[time.getHours()];
 }
 
