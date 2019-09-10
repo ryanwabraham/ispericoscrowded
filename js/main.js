@@ -225,15 +225,15 @@ function toggleModal() {
     }
 }
 
-function updateShareButtonText(newText) {
-    shareButton.innerHTML = newText;
-}
-
 function updateOgData(message) {
     // replace spaces with underscores
     const imgPath = `./img/og_${message.status.replace(/\s+/g, "_")}.png`;
     ogTitle.setAttribute("content", message.summary);
     ogImage.setAttribute("content", imgPath);
+}
+
+function updateShareButtonText(newText) {
+    shareButton.innerHTML = newText;
 }
 
 function updateView(message) {
