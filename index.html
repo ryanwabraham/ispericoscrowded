@@ -16,7 +16,7 @@
         <link rel="manifest" href="./js/manifest.json">
         <link rel="apple-touch-icon" href="./img/apple_touch_icon.png">
         <link rel="shortcut icon" href="./img/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="./css/style.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
 
         <!-- google analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145765505-1"></script>
@@ -33,13 +33,15 @@
                 </h1>
                 <p id="crowd-summary"></p>
             </section>
+            <!-- share button -->
+            <button id="share-button" class="hidden shadow">Tell a Friend!</button>
             <!-- toolbar -->
             <div id="download-icon" class="hidden"></div>
             <div id="about-icon"></div>
             <!-- modal overlay -->
             <section id="overlay" class="hidden"></section>
             <!-- modal -->
-            <section id="modal" class="hidden">
+            <section id="modal" class="hidden shadow">
                 <div id="modal-close-icon"></div>
                 <img id="modal-app-icon" src="./img/apple_touch_icon.png" alt="Is Pericos Crowded Icon"/>
                 <h3>Install Is Pericos Crowded 0.2.0</h3>

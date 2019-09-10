@@ -9,6 +9,7 @@ const main = document.getElementById("main");
 const contentWrapper = document.getElementById("crowd-content-wrapper");
 const statusHeader = document.getElementById("crowd-status");
 const summaryText = document.getElementById("crowd-summary");
+const shareButton = document.getElementById("share-button");
 const aboutIcon = document.getElementById("about-icon");
 const downloadIcon = document.getElementById("download-icon");
 const closeIcon = document.getElementById("close-icon");
@@ -31,6 +32,7 @@ const emojiMap = {
     "Don't go.": ["⚰", "😵", "🤬", "🙅"]
 };
 let appNeedsRefresh = false;
+let crowdScore = 0;
 
 //
 // functions
@@ -67,7 +69,8 @@ function calculateScore(crowdData) {
     const historicalPopularity = getHistoricalData(crowdData) / 100;
     // weight the currentPopularity more
     // than the historicalPopularity
-    return Math.round(((currentPopularity * 0.7) + (historicalPopularity * 0.3)) * 100);
+    crowdScore = Math.round(((currentPopularity * 0.7) + (historicalPopularity * 0.3)) * 100);
+    return crowdScore;
 }
 
 function crowdDataIsValid(crowdData) {
@@ -222,6 +225,10 @@ function toggleModal() {
     }
 }
 
+function updateShareButtonText(newText) {
+    shareButton.innerHTML = newText;
+}
+
 function updateOgData(message) {
     // replace spaces with underscores
     const imgPath = `./img/og_${message.status.replace(/\s+/g, "_")}.png`;
@@ -237,6 +244,16 @@ function updateView(message) {
         summaryText.innerHTML = message.summary;
         showElement(summaryText);
     }, 100);
+    // show share button if
+    // native sharing is supported
+    if (typeof navigator.share !== "undefined") {
+        if (crowdScore >= 60) {
+            updateShareButtonText("Warn a Friend!");
+        }
+        setTimeout(() => {
+            showElement(shareButton);
+        }, 200);
+    }
 }
 
 //
@@ -276,6 +293,23 @@ aboutIcon.addEventListener("click", (e) => {
 downloadIcon.addEventListener("click", (e) => {
     e.stopPropagation();
     toggleModal();
+});
+
+// open share panel when share button is clicked
+shareButton.addEventListener("click", (e) => {
+    navigator.share({
+        title: document.title,
+        text: document.querySelector("meta[property='description']").getAttribute("content"),
+        url: document.querySelector("link[rel=canonical]").href
+    }).then(() => {
+        // on completion change the button
+        // text to an appreciative message
+        const originalButtonText = shareButton.innerHTML;
+        updateShareButtonText("You da 💣!");
+        setTimeout(() => {
+            updateShareButtonText(originalButtonText);
+        }, 3000);
+    });
 });
 
 // close modal when modal close icon is clicked
