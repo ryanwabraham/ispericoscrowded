@@ -3,6 +3,8 @@
 //
 
 const body = document.body;
+const ogTitle = document.querySelector("meta[property='og:title']");
+const ogImage = document.querySelector("meta[property='og:image']");
 const main = document.getElementById("main");
 const contentWrapper = document.getElementById("crowd-content-wrapper");
 const statusHeader = document.getElementById("crowd-status");
@@ -84,9 +86,10 @@ function crowdDataIsValid(crowdData) {
 }
 
 function displayClosedMessage() {
-    const reaction = "Bummer.";
-    const summary = `${reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
-    updateView(summary, reaction);
+    const message = {};
+    message.reaction = "Bummer.";
+    message.summary = `${message.reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
+    updateView(message);
 }
 
 function displayDebugInfo(crowdData, score) {
@@ -104,9 +107,10 @@ function displayDebugInfo(crowdData, score) {
 }
 
 function displayErrorMessage() {
-    const reaction = "Oops.";
-    const summary = `${reaction} An <b>error</b> occurred. Please try again later.`;
-    updateView(summary, reaction);
+    const message = {};
+    message.reaction = "Oops.";
+    message.summary = `${reaction} An <b>error</b> occurred. Please try again later.`;
+    updateView(message);
 }
 
 function initializeApp() {
@@ -158,7 +162,8 @@ function processCrowdData(crowdData) {
         const score = calculateScore(crowdData);
         const message = buildMessage(score);
         if (debugMode) displayDebugInfo(crowdData, score);
-        updateView(message.summary, message.reaction);
+        updateOgData(message);
+        updateView(message);
     }
 }
 
@@ -217,12 +222,19 @@ function toggleModal() {
     }
 }
 
-function updateView(summary, reaction) {
-    const emoji = emojiMap[reaction][Math.floor(Math.random() * 4)];
+function updateOgData(message) {
+    // replace spaces with underscores
+    const imgPath = `./img/og_${message.status.replace(/\s+/g, "_")}.png`;
+    ogTitle.setAttribute("content", message.summary);
+    ogImage.setAttribute("content", imgPath);
+}
+
+function updateView(message) {
+    const emoji = emojiMap[message.reaction][Math.floor(Math.random() * 4)];
     statusHeader.innerHTML = emoji;
     showElement(statusHeader);
     setTimeout(() => {
-        summaryText.innerHTML = summary;
+        summaryText.innerHTML = message.summary;
         showElement(summaryText);
     }, 100);
 }
