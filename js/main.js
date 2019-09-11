@@ -60,6 +60,7 @@ function buildMessage(score) {
         message.status = "mobbed";
         message.reaction = "Don't go.";
     }
+    message.ogTitle = `${message.reaction} Los Pericos is ${message.status} right now.`;
     message.summary = `${message.reaction} Los Pericos is <nobr>${message.status}</nobr> right&nbsp;now.`;
     return message;
 }
@@ -228,7 +229,7 @@ function toggleModal() {
 function updateOgData(message) {
     // replace spaces with underscores
     const imgPath = `./img/og_${message.status.replace(/\s+/g, "_")}.png`;
-    ogTitle.setAttribute("content", message.summary);
+    ogTitle.setAttribute("content", message.ogTitle);
     ogImage.setAttribute("content", imgPath);
 }
 
@@ -297,15 +298,15 @@ downloadIcon.addEventListener("click", (e) => {
 
 // open share panel when share button is clicked
 shareButton.addEventListener("click", (e) => {
+    const shareUrl = document.querySelector("link[rel=canonical]").href;
     navigator.share({
-        title: document.title,
-        text: document.querySelector("meta[property='description']").getAttribute("content"),
-        url: document.querySelector("link[rel=canonical]").href
+        title: ogTitle.innerText,
+        url: shareUrl
     }).then(() => {
         // on completion change the button
         // text to an appreciative message
         const originalButtonText = shareButton.innerHTML;
-        updateShareButtonText("You da 💣!");
+        updateShareButtonText("You're a good friend.");
         setTimeout(() => {
             updateShareButtonText(originalButtonText);
         }, 3000);
