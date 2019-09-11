@@ -41,19 +41,19 @@ let crowdScore = 0;
 function buildMessage(score) {
     const message = {};
     // build a message based on score
-    if (score < 10) {
+    if (score < 20) {
         message.status = "empty";
         message.reaction = "Sick!";
-    } else if (score >= 10 && score < 30) {
+    } else if (score >= 20 && score < 30) {
         message.status = "not crowded";
         message.reaction = "All good!";
     } else if (score >= 30 && score < 40) {
         message.status = "not too crowded";
         message.reaction = "Nice.";
-    } else if (score >= 40 && score < 60) {
+    } else if (score >= 40 && score < 70) {
         message.status = "kinda crowded";
         message.reaction = "Welp,";
-    } else if (score >= 60 && score < 80) {
+    } else if (score >= 70 && score < 80) {
         message.status = "crowded";
         message.reaction = "Yikes.";
     } else if (score >= 80 && score <= 100) {
@@ -80,7 +80,7 @@ function crowdDataIsValid(crowdData) {
     // an API error occurred
     if (typeof crowdData.current_popularity === "undefined") {
         if (pericosIsClosed(crowdData)) {
-            displayClosedMessage()
+            displayClosedMessage();
         } else {
             displayErrorMessage();
         }
