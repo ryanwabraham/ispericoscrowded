@@ -60,7 +60,7 @@ function buildMessage(score) {
         message.status = "mobbed";
         message.reaction = "Don't go.";
     }
-    message.ogTitle = `${message.reaction} Los Pericos is ${message.status} right now.`;
+    message.metaDescription = `${message.reaction} Los Pericos is ${message.status} right now.`;
     message.summary = `${message.reaction} Los Pericos is <nobr>${message.status}</nobr> right&nbsp;now.`;
     return message;
 }
@@ -113,8 +113,21 @@ function displayDebugInfo(crowdData, score) {
 function displayErrorMessage() {
     const message = {};
     message.reaction = "Oops.";
-    message.summary = `${reaction} An <b>error</b> occurred. Please try again later.`;
+    message.summary = `${message.reaction} An <b>error</b> occurred. Please try again later.`;
     updateView(message);
+}
+
+function displayShareButton() {
+    // show share button if
+    // native sharing is supported
+    if (typeof navigator.share !== "undefined") {
+        if (crowdScore >= 60) {
+            updateShareButtonText("Warn a Friend!");
+        }
+        setTimeout(() => {
+            showElement(shareButton);
+        }, 200);
+    }
 }
 
 function initializeApp() {
@@ -166,8 +179,9 @@ function processCrowdData(crowdData) {
         const score = calculateScore(crowdData);
         const message = buildMessage(score);
         if (debugMode) displayDebugInfo(crowdData, score);
-        updateOgData(message);
+        updateMetaData(message);
         updateView(message);
+        displayShareButton();
     }
 }
 
@@ -226,10 +240,10 @@ function toggleModal() {
     }
 }
 
-function updateOgData(message) {
+function updateMetaData(message) {
     // replace spaces with underscores
-    const imgPath = `./img/og_${message.status.replace(/\s+/g, "_")}.png`;
-    ogTitle.setAttribute("content", message.ogTitle);
+    const imgPath = `${document.location.href}img/og_${message.status.replace(/\s+/g, "_")}.png`;
+    ogTitle.setAttribute("content", message.metaDescription);
     ogImage.setAttribute("content", imgPath);
 }
 
@@ -245,16 +259,6 @@ function updateView(message) {
         summaryText.innerHTML = message.summary;
         showElement(summaryText);
     }, 100);
-    // show share button if
-    // native sharing is supported
-    if (typeof navigator.share !== "undefined") {
-        if (crowdScore >= 60) {
-            updateShareButtonText("Warn a Friend!");
-        }
-        setTimeout(() => {
-            showElement(shareButton);
-        }, 200);
-    }
 }
 
 //
@@ -298,10 +302,9 @@ downloadIcon.addEventListener("click", (e) => {
 
 // open share panel when share button is clicked
 shareButton.addEventListener("click", (e) => {
-    const shareUrl = document.querySelector("link[rel=canonical]").href;
     navigator.share({
         title: ogTitle.innerText,
-        url: shareUrl
+        url: document.location.href
     }).then(() => {
         // on completion change the button
         // text to an appreciative message
