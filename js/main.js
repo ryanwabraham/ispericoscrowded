@@ -5,7 +5,6 @@
 const body = document.body;
 const ogTitle = document.querySelector("meta[property='og:title']");
 const ogDescription = document.querySelector("meta[property='og:description']");
-const ogImage = document.querySelector("meta[property='og:image']");
 const main = document.getElementById("main");
 const contentWrapper = document.getElementById("crowd-content-wrapper");
 const statusHeader = document.getElementById("crowd-status");
@@ -246,10 +245,7 @@ function toggleModal() {
 }
 
 function updateMetaData(message) {
-    // replace spaces with underscores
-    const imgPath = `${document.location.href}img/og_${message.status.replace(/\s+/g, "_")}.png`;
     ogDescription.setAttribute("content", message.metaDescription);
-    ogImage.setAttribute("content", imgPath);
 }
 
 function updateShareButtonText(newText) {
@@ -309,8 +305,8 @@ downloadIcon.addEventListener("click", (e) => {
 shareButton.addEventListener("click", (e) => {
     const shareUrl = document.querySelector("link[rel=canonical]").href;
     navigator.share({
-        title: ogTitle.innerText,
-        text: ogDescription.innerText,
+        title: ogTitle.getAttribute("content"),
+        text: ogDescription.getAttribute("content"),
         url: shareUrl
     }).then(() => {
         // on completion change the button
