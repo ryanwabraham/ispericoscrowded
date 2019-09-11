@@ -4,6 +4,7 @@
 
 const body = document.body;
 const ogTitle = document.querySelector("meta[property='og:title']");
+const ogDescription = document.querySelector("meta[property='og:description']");
 const ogImage = document.querySelector("meta[property='og:image']");
 const main = document.getElementById("main");
 const contentWrapper = document.getElementById("crowd-content-wrapper");
@@ -60,7 +61,7 @@ function buildMessage(score) {
         message.status = "mobbed";
         message.reaction = "Don't go.";
     }
-    message.metaDescription = `${message.reaction} Los Pericos is ${message.status} right now.`;
+    message.metaDescription = `${getReactionEmoji(message.reaction)} ${message.reaction} Los Pericos is ${message.status} right now.`;
     message.summary = `${message.reaction} Los Pericos is <nobr>${message.status}</nobr> right&nbsp;now.`;
     return message;
 }
@@ -128,6 +129,10 @@ function displayShareButton() {
             showElement(shareButton);
         }, 200);
     }
+}
+
+function getReactionEmoji(reaction) {
+    return emojiMap[reaction][Math.floor(Math.random() * 4)];
 }
 
 function initializeApp() {
@@ -243,7 +248,7 @@ function toggleModal() {
 function updateMetaData(message) {
     // replace spaces with underscores
     const imgPath = `${document.location.href}img/og_${message.status.replace(/\s+/g, "_")}.png`;
-    ogTitle.setAttribute("content", message.metaDescription);
+    ogDescription.setAttribute("content", message.metaDescription);
     ogImage.setAttribute("content", imgPath);
 }
 
@@ -252,7 +257,7 @@ function updateShareButtonText(newText) {
 }
 
 function updateView(message) {
-    const emoji = emojiMap[message.reaction][Math.floor(Math.random() * 4)];
+    const emoji = getReactionEmoji(message.reaction);
     statusHeader.innerHTML = emoji;
     showElement(statusHeader);
     setTimeout(() => {
@@ -302,14 +307,16 @@ downloadIcon.addEventListener("click", (e) => {
 
 // open share panel when share button is clicked
 shareButton.addEventListener("click", (e) => {
+    const shareUrl = document.querySelector("link[rel=canonical]").href;
     navigator.share({
         title: ogTitle.innerText,
-        url: document.location.href
+        text: ogDescription.innerText,
+        url: shareUrl
     }).then(() => {
         // on completion change the button
         // text to an appreciative message
         const originalButtonText = shareButton.innerHTML;
-        updateShareButtonText("You're a good friend.");
+        updateShareButtonText("You rock! 🎸");
         setTimeout(() => {
             updateShareButtonText(originalButtonText);
         }, 3000);
