@@ -27,7 +27,7 @@ const emojiMap = {
     "Sick!": ["🙌", "🥳", "🎉", "💯"],
     "All good!": ["🙌", "👏", "👌", "🤙"],
     "Nice.": ["😙", "😌", "👌", "🤙"],
-    "Welp,": ["😬", "😰", "😑", "😅"],
+    "Welp,": ["😬", "😒", "😑", "😅"],
     "Yikes.": ["🙅", "🤢", "👎", "😬"],
     "Don't go.": ["⚰", "😵", "🤬", "🙅"]
 };
@@ -47,10 +47,10 @@ function buildMessage(score) {
     } else if (score >= 20 && score < 30) {
         message.status = "not crowded";
         message.reaction = "All good!";
-    } else if (score >= 30 && score < 40) {
+    } else if (score >= 30 && score < 45) {
         message.status = "not too crowded";
         message.reaction = "Nice.";
-    } else if (score >= 40 && score < 70) {
+    } else if (score >= 45 && score < 70) {
         message.status = "kinda crowded";
         message.reaction = "Welp,";
     } else if (score >= 70 && score < 80) {
@@ -70,7 +70,7 @@ function calculateScore(crowdData) {
     const historicalPopularity = getHistoricalData(crowdData) / 100;
     // weight the currentPopularity more
     // than the historicalPopularity
-    crowdScore = Math.round(((currentPopularity * 0.7) + (historicalPopularity * 0.3)) * 100);
+    crowdScore = Math.round(((currentPopularity * 0.8) + (historicalPopularity * 0.2)) * 100);
     return crowdScore;
 }
 
