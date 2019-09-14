@@ -22,14 +22,14 @@ const fineprint = document.getElementById("fineprint");
 const endpoint = "https://o8ulxwqrt9.execute-api.us-west-1.amazonaws.com/dev/pericos";
 const debugMode = true;
 const emojiMap = {
-    "Oops.": ["😳", "😅", "🤦", "🤯"],
-    "Bummer.": ["🦗", "😢", "😭", "😞"],
-    "Sick!": ["🙌", "🥳", "🎉", "💯"],
-    "All good!": ["🙌", "👏", "👌", "🤙"],
-    "Nice.": ["😙", "😌", "👌", "🤙"],
-    "Welp,": ["😬", "😒", "😑", "😅"],
-    "Yikes.": ["🙅", "🤢", "👎", "😬"],
-    "Don't go.": ["⚰", "😵", "🤬", "🙅"]
+    "error": ["😳", "😅", "🤦", "🤯"],
+    "closed": ["🦗", "😢", "😭", "😞"],
+    "empty": ["🙌", "🥳", "🎉", "💯"],
+    "not crowded": ["🙌", "👏", "👌", "🤙"],
+    "not too crowded": ["😙", "😌", "👌", "🤙"],
+    "kinda crowded": ["😐", "😒", "😑", "😶"],
+    "crowded": ["🙅", "🤢", "👎", "😬"],
+    "mobbed": ["⚰", "😵", "🤬", "🙅"]
 };
 let appNeedsRefresh = false;
 let crowdScore = 0;
@@ -60,7 +60,7 @@ function buildMessage(score) {
         message.status = "mobbed";
         message.reaction = "Don't go.";
     }
-    message.metaDescription = `${getReactionEmoji(message.reaction)} ${message.reaction} Los Pericos is ${message.status} right now.`;
+    message.metaDescription = `${getReactionEmoji(message.status)} ${message.reaction} Los Pericos is ${message.status} right now.`;
     message.summary = `${message.reaction} Los Pericos is <nobr>${message.status}</nobr> right&nbsp;now.`;
     return message;
 }
@@ -91,8 +91,9 @@ function crowdDataIsValid(crowdData) {
 
 function displayClosedMessage() {
     const message = {};
+    message.status = "closed";
     message.reaction = "Bummer.";
-    message.summary = `${message.reaction} Los Pericos is <b>closed</b> right&nbsp;now.`;
+    message.summary = `${message.reaction} Los Pericos is <b>${message.status}</b> right&nbsp;now.`;
     updateView(message);
 }
 
@@ -112,8 +113,9 @@ function displayDebugInfo(crowdData, score) {
 
 function displayErrorMessage() {
     const message = {};
+    message.status = "error";
     message.reaction = "Oops.";
-    message.summary = `${message.reaction} An <b>error</b> occurred. Please try again later.`;
+    message.summary = `${message.reaction} An <b>${message.status}</b> occurred. Please try again later.`;
     updateView(message);
 }
 
@@ -253,7 +255,7 @@ function updateShareButtonText(newText) {
 }
 
 function updateView(message) {
-    const emoji = getReactionEmoji(message.reaction);
+    const emoji = getReactionEmoji(message.status);
     statusHeader.innerHTML = emoji;
     showElement(statusHeader);
     setTimeout(() => {
