@@ -305,7 +305,9 @@ downloadIcon.addEventListener("click", (e) => {
 
 // open share panel when share button is clicked
 shareButton.addEventListener("click", (e) => {
-    const shareUrl = document.querySelector("link[rel=canonical]").href;
+    let shareUrl = document.querySelector("link[rel=canonical]").href;
+    // remove trailing slash and add utm source
+    shareUrl = shareUrl.replace(/\/$/, "") + "?utm_source=share";
     navigator.share({
         title: ogTitle.getAttribute("content"),
         text: ogDescription.getAttribute("content"),
