@@ -50,10 +50,10 @@ function buildMessage(score) {
     } else if (score >= 30 && score < 45) {
         message.status = "not too crowded";
         message.reaction = "Nice.";
-    } else if (score >= 45 && score < 70) {
+    } else if (score >= 45 && score < 75) {
         message.status = "kinda crowded";
         message.reaction = "Welp,";
-    } else if (score >= 70 && score < 80) {
+    } else if (score >= 75 && score < 80) {
         message.status = "crowded";
         message.reaction = "Yikes.";
     } else if (score >= 80 && score <= 100) {
