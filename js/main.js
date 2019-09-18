@@ -68,9 +68,12 @@ function buildMessage(score) {
 function calculateScore(crowdData) {
     const currentPopularity = crowdData.current_popularity / 100;
     const historicalPopularity = getHistoricalData(crowdData) / 100;
-    // weight the currentPopularity more
-    // than the historicalPopularity
-    crowdScore = Math.round(((currentPopularity * 0.8) + (historicalPopularity * 0.2)) * 100);
+    const weightedScore = Math.round(((currentPopularity * 0.8) + (historicalPopularity * 0.2)) * 100);
+    // if the currentPopularity is lower
+    // than the historicalPopularity,
+    // use a weighted score because there
+    // is less data to work with
+    crowdScore = currentPopularity < historicalPopularity ? weightedScore : currentPopularity;
     return crowdScore;
 }
 
