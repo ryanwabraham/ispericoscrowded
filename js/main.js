@@ -27,7 +27,7 @@ const emojiMap = {
     "empty": ["🙌", "🥳", "🎉", "💯"],
     "not crowded": ["🙌", "💃", "👌", "🤙"],
     "not too crowded": ["😙", "😌", "👌", "🤙"],
-    "kinda crowded": ["😐", "😒", "😑", "🙈"],
+    "a little crowded": ["😐", "😒", "😑", "🙈"],
     "pretty crowded": ["😥", "😖", "😬", "😞"],
     "crowded": ["🙅", "🤢", "👎", "😬"],
     "mobbed": ["⚰", "😵", "🤬", "🙅"]
@@ -77,7 +77,7 @@ function calculateScore(crowdData) {
     // than the historicalPopularity,
     // use a weighted score because there
     // is less data to work with
-    crowdScore = currentPopularity < historicalPopularity ? weightedScore : currentPopularity * 100;
+    crowdScore = currentPopularity < historicalPopularity ? weightedScore : Math.round(currentPopularity * 100);
     return crowdScore;
 }
 
