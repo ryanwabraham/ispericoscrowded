@@ -28,6 +28,7 @@ const emojiMap = {
     "not crowded": ["🙌", "💃", "👌", "🤙"],
     "not too crowded": ["😙", "😌", "👌", "🤙"],
     "kinda crowded": ["😐", "😒", "😑", "🙈"],
+    "pretty crowded": ["😥", "😖", "😬", "😞"],
     "crowded": ["🙅", "🤢", "👎", "😬"],
     "mobbed": ["⚰", "😵", "🤬", "🙅"]
 };
@@ -50,13 +51,16 @@ function buildMessage(score) {
     } else if (score >= 30 && score < 45) {
         message.status = "not too crowded";
         message.reaction = "Nice.";
-    } else if (score >= 45 && score < 75) {
-        message.status = "kinda crowded";
+    } else if (score >= 45 && score < 60) {
+        message.status = "a little crowded";
         message.reaction = "Welp,";
-    } else if (score >= 75 && score < 80) {
+    } else if (score >= 60 && score < 75) {
+        message.status = "pretty crowded";
+        message.reaction = "Bummer.";
+    } else if (score >= 75 && score < 90) {
         message.status = "crowded";
         message.reaction = "Yikes.";
-    } else if (score >= 80 && score <= 100) {
+    } else if (score >= 90 && score <= 100) {
         message.status = "mobbed";
         message.reaction = "Don't go.";
     }
@@ -73,7 +77,7 @@ function calculateScore(crowdData) {
     // than the historicalPopularity,
     // use a weighted score because there
     // is less data to work with
-    crowdScore = currentPopularity < historicalPopularity ? weightedScore : currentPopularity;
+    crowdScore = currentPopularity < historicalPopularity ? weightedScore : currentPopularity * 100;
     return crowdScore;
 }
 
