@@ -70,6 +70,11 @@ function buildMessage(score) {
 }
 
 function calculateScore(crowdData) {
+    // if there is no current_popularity
+    // use the historical value
+    if (typeof crowdData.current_popularity === "undefined") {
+        crowdData.current_popularity = getHistoricalData(crowdData);
+    }
     const currentPopularity = crowdData.current_popularity / 100;
     const historicalPopularity = getHistoricalData(crowdData) / 100;
     const weightedScore = Math.round(((currentPopularity * 0.8) + (historicalPopularity * 0.2)) * 100);
@@ -79,21 +84,6 @@ function calculateScore(crowdData) {
     // is less data to work with
     crowdScore = currentPopularity < historicalPopularity ? weightedScore : Math.round(currentPopularity * 100);
     return crowdScore;
-}
-
-function crowdDataIsValid(crowdData) {
-    // if there is no current_popularity
-    // either Pericos is closed or
-    // an API error occurred
-    if (typeof crowdData.current_popularity === "undefined") {
-        if (pericosIsClosed(crowdData)) {
-            displayClosedMessage();
-        } else {
-            displayErrorMessage();
-        }
-        return false;
-    }
-    return true;
 }
 
 function displayClosedMessage() {
@@ -188,7 +178,9 @@ function pericosIsClosed(crowdData) {
 }
 
 function processCrowdData(crowdData) {
-    if (crowdDataIsValid(crowdData)) {
+    if (pericosIsClosed(crowdData)) {
+        displayClosedMessage();
+    } else {
         const score = calculateScore(crowdData);
         const message = buildMessage(score);
         if (debugMode) displayDebugInfo(crowdData, score);
