@@ -108,6 +108,13 @@ function displayDebugInfo(crowdData, score) {
     }
 }
 
+function displayDiscontinuedMessage() {
+    const message = {};
+    message.status = "closed";
+    message.summary = "Sorry all. This app has been discontinued.";
+    updateView(message);
+}
+
 function displayErrorMessage() {
     const message = {};
     message.status = "error";
@@ -337,9 +344,3 @@ window.addEventListener("keyup", (e) => {
         toggleMenu();
     }
 }, false);
-
-//
-// initialize app
-//
-
-initializeApp();
